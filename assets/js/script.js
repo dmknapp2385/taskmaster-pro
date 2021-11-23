@@ -175,22 +175,56 @@ $(".card .list-group").sortable({
   scroll: false, 
   tolerance: "pointer", 
   helper: "clone", 
-  activate: function(event) {
-    console.log("activate", this);
-  }, 
-  deactivate: function (event) {
-    console.log("deactivate", this);
-  },
-  over: function(event) {
-    console.log("over", event.target);
-  },
-  out: function(event) {
-    console.log("out", event.target);
-  },
+  // activate: function(event) {
+  //   console.log("activate", this);
+  // }, 
+  // deactivate: function (event) {
+  //   console.log("deactivate", this);
+  // },
+  // over: function(event) {
+  //   console.log("over", event.target);
+  // },
+  // out: function(event) {
+  //   console.log("out", event.target);
+  // },
   update: function(event) {
-    console.log("update", this);
+    // array to store teh atsk data in 
+    var tempArr = [];
+
+    // loop over current set of children in sortable list
+    $(this).children().each(function() {
+      var text = $(this)
+        .find ("p")
+        .text()
+        .trim();
+      var date = $(this)
+        .find("span")
+        .text()
+        .trim();
+
+      // add task data to the temp array as an object
+      tempArr.push({
+        text: text,
+        date: date
+      });
+    });
+    // trim down the lsit's ID to match object property
+    var arrName = $(this)
+      .attr("id")
+      .replace("list-", "");
+    //update array on tasks object and saveTasks
+    tasks[arrName] = tempArr;
+    saveTasks();
   }
 });
+
+$("#trash").droppable({
+  accept: ".card .list-group-item", 
+  tolerance: "touch", 
+  drop: function(event, ui) {
+    ui.draggable.remove();
+  }
+})
 
 // remove all tasks
 $("#remove-tasks").on("click", function() {
