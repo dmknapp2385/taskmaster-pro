@@ -99,12 +99,21 @@ $(".list-group").on("click", "span", function() {
   // swap out elements
   $(this).replaceWith(dateInput);
 
-  // automatically fous on new elemetn
+  // enable jquery ui datepicker
+  dateInput.datepicker({
+    minDate: 1, 
+    onClose: function () {
+      // when calendear is closed, foce a "chage" event on the 'dateInput
+      $(this).trigger("change");
+    }
+  });
+
+  // automatically bring up calendar 
   dateInput.trigger("focus");
 });
 
 // value of due date was changed
-$(".list-group").on("blur", "input[type='text']", function() {
+$(".list-group").on("change", "input[type='text']", function() {
   // get current text
   var date = $(this)
     .val()
@@ -224,7 +233,12 @@ $("#trash").droppable({
   drop: function(event, ui) {
     ui.draggable.remove();
   }
-})
+});
+
+$("#modalDueDate").datepicker({
+  minDate: 1
+});
+
 
 // remove all tasks
 $("#remove-tasks").on("click", function() {
